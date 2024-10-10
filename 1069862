@@ -1,0 +1,130 @@
+class InventoryManager:
+    def __init__(self):
+        self.item_list = {}
+        self.item_id_counter = 1
+
+    # Add a new item
+    def create_item(self):
+        item_name = input("Enter item name: ")
+        item_category = input("Enter item category: ")
+        item_price = float(input("Enter item price: "))
+        item_id = self.item_id_counter
+        self.item_list[item_id] = {
+            'name': item_name,
+            'category': item_category,
+            'price': item_price
+        }
+        self.item_id_counter += 1
+        print(f"Item added with ID: {item_id}")
+    
+    # Update an existing item
+    def modify_item(self):
+        item_id = int(input("Enter item ID to modify: "))
+        if item_id in self.item_list:
+            new_name = input("Enter new item name (or leave blank): ")
+            new_category = input("Enter new item category (or leave blank): ")
+            new_price = input("Enter new item price (or leave blank): ")
+            
+            if new_name:
+                self.item_list[item_id]['name'] = new_name
+            if new_category:
+                self.item_list[item_id]['category'] = new_category
+            if new_price:
+                self.item_list[item_id]['price'] = float(new_price)
+                
+            print(f"Item {item_id} updated successfully.")
+        else:
+            print(f"Item with ID {item_id} not found.")
+
+    # Delete an item by ID
+    def remove_item(self):
+        item_id = int(input("Enter item ID to delete: "))
+        if item_id in self.item_list:
+            del self.item_list[item_id]
+            print(f"Item {item_id} deleted.")
+        else:
+            print(f"Item with ID {item_id} not found.")
+    
+    # Get item by ID
+    def retrieve_item_by_id(self):
+        item_id = int(input("Enter item ID: "))
+        item = self.item_list.get(item_id, None)
+        if item:
+            print(f"Item ID {item_id}: {item}")
+        else:
+            print(f"Item with ID {item_id} not found.")
+
+    # Get all items
+    def retrieve_all_items(self):
+        if not self.item_list:
+            print("No items available.")
+        else:
+            for item_id, item in self.item_list.items():
+                print(f"Item ID {item_id}: {item}")
+
+    # Get items by category
+    def retrieve_items_by_category(self):
+        category = input("Enter category: ")
+        result = {item_id: item for item_id, item in self.item_list.items() if item['category'] == category}
+        if result:
+            for item_id, item in result.items():
+                print(f"Item ID {item_id}: {item}")
+        else:
+            print(f"No items found in category '{category}'.")
+
+    # Get items between two prices
+    def retrieve_items_between_prices(self):
+        min_price = float(input("Enter minimum price: "))
+        max_price = float(input("Enter maximum price: "))
+        result = {item_id: item for item_id, item in self.item_list.items() if min_price <= item['price'] <= max_price}
+        if result:
+            for item_id, item in result.items():
+                print(f"Item ID {item_id}: {item}")
+        else:
+            print(f"No items found in the price range {min_price} to {max_price}.")
+
+    # Exit the program
+    def terminate_program(self):
+        print("Exiting the program.")
+        exit()
+
+# Menu-driven interface
+def display_menu():
+    print("\nInventory Manager Menu:")
+    print("1. Add Item")
+    print("2. Update Item")
+    print("3. Delete Item")
+    print("4. Get Item By ID")
+    print("5. Get All Items")
+    print("6. Get Items By Category")
+    print("7. Get Items Between Prices")
+    print("8. Exit")
+
+def start():
+    manager = InventoryManager()
+    
+    # Dictionary to simulate switch-case behavior
+    menu_actions = {
+        1: manager.create_item,
+        2: manager.modify_item,
+        3: manager.remove_item,
+        4: manager.retrieve_item_by_id,
+        5: manager.retrieve_all_items,
+        6: manager.retrieve_items_by_category,
+        7: manager.retrieve_items_between_prices,
+        8: manager.terminate_program
+    }
+
+    while True:
+        display_menu()
+        try:
+            option = int(input("Choose an option: "))
+            if option in menu_actions:
+                menu_actions[option]()  # Call the selected function
+            else:
+                print("Invalid option. Please try again.")
+        except ValueError:
+            print("Please enter a valid number.")
+
+if __name__ == "__main__":
+    start()
